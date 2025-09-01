@@ -21,20 +21,21 @@ const cartReducer = createSlice({
     getAllProducts: (state = initProduct, action) => {
       return { ...state, products: action.payload }
     },
-    addToCart: (state = initProduct, action) => {
+    addToCart: (state: any = initProduct, action) => {
       if (state.numberCart === 0) {
         const cart = {
           id: action.payload.id,
-          quantity: 1,
+          quantity: action.payload.quantity,
           name: action.payload.name,
-          image: action.payload.name,
-          price: action.payload.price
+          image: action.payload.image,
+          price: action.payload.price,
+          description: action.payload.description
         }
         state.numberCart++;
         state.carts.push(cart);
       } else {
         let check = false;
-        state.carts.forEach((item, key) => {
+        state.carts.forEach((item: any, key: any) => {
           if (item.id === action.payload.id) {
               state.carts[key].quantity++;
               check = true;
@@ -45,92 +46,51 @@ const cartReducer = createSlice({
             id: action.payload.id,
             quantity: 1,
             name: action.payload.name,
-            image: action.payload.name,
-            price: action.payload.price
+            image: action.payload.image,
+            price: action.payload.price,
+            description: action.payload.description
           }
           state.carts.push(cart);
         }
       }
     },
+    updateCart: (state: any, action) => {
+      const itemIndex = state.carts.findIndex((item: any) => item.image === action.payload.image);
+      if (itemIndex >= 0) {
+        state.carts[itemIndex] = {
+          ...state.carts[itemIndex],
+          quantity: state.carts[itemIndex].quantity + 1
+        }
+      } else {
+        state.carts.push(action.payload);
+      }
+    },
     removeFromCart: (state = initProduct, action) => {
 
     },
-    increaseQuantity: (state = initProduct, action) => {
-      return {
-        ...state,
+    increaseQuantity: (state: any = initProduct, action) => {
+      const itemIndex = state.carts.findIndex((item: any) => item.image === action.payload.image);
+      if (itemIndex >= 0) {
+        state.carts[itemIndex] = {
+          ...state.carts[itemIndex],
+          quantity: state.carts[itemIndex].quantity + 1
+        }
       }
     },
-    decreaseQuantity: (state = initProduct, action) => {
-      return {
-        ...state,
-        quantity: action.payload.quantity--
+    decreaseQuantity: (state: any = initProduct, action) => {
+      const itemIndex = state.carts.findIndex((item: any) => item.image === action.payload.image);
+      if (itemIndex >= 0) {
+        state.carts[itemIndex] = {
+          ...state.carts[itemIndex],
+          quantity: state.carts[itemIndex].quantity - 1
+        }
+        if (state.carts[itemIndex].quantity === 0) {
+          state.carts.splice(itemIndex, 1);
+        }
       }
     }
-  //   (state = initProduct, action) {
-  // switch (action.type) {
-  //   case GET_ALL_PRODUCTS:
-  //     return { ...state, products: action.payload };
-  //   case ADD_TO_CART:
-  //     if (state.numberCart === 0) {
-  //       const cart = {
-  //         id: action.payload.id,
-  //         quantity: 1,
-  //         name: action.payload.name,
-  //         image: action.payload.image,
-  //         price: action.payload.price,
-  //       };
-  //       state.carts.push(cart);
-  //     } else {
-  //       let check = false;
-  //       state.carts.map((item, key) => {
-  //         if (item.id == action.payload.id) {
-  //           state.carts[key].quantity++;
-  //           check = true;
-  //         }
-  //       });
-  //       if (!check) {
-  //         const _cart = {
-  //           id: action.payload.id,
-  //           quantity: 1,
-  //           name: action.payload.name,
-  //           image: action.payload.image,
-  //           price: action.payload.price,
-  //         };
-  //         state.carts.push(_cart);
-  //       }
-  //     }
-  //     return {
-  //       ...state,
-  //       numberCart: state.numberCart + 1,
-  //     };
-  //   case REMOVE_FROM_CART:
-  //     let quantity_ = state.carts[action.payload]?.quantity;
-  //       return {
-  //           ...state,
-  //           numberCart: state.numberCart - quantity_,
-  //           cartReducerarts: state.carts.filter((item) => {
-  //           return item.id !== state.carts[action.payload]?.id;
-  //       }),
-  //   };
-  //   case INCREASE_QUANTITY:
-  //     state.numberCart++;
-  //     state.carts[action.payload].quantity++;
-  //     return {
-  //       ...state,
-  //   };
-  //   case DECREASE_QUANTITY:
-  //     const quantity = state.carts[action.payload].quantity;
-  //     if (quantity > 1) {
-  //       state.numberCart--;
-  //       state.carts[action.payload].quantity--;
-  //     }
-  //     return {
-  //       ...state,
-  //     };
-  //   case UPDATE_CART:
-  // }
 }
 });
 
-export const { addToCart, getAllProducts, decreaseQuantity, increaseQuantity } = cartReducer.actions;
+export const { addToCart, updateCart, getAllProducts, decreaseQuantity, increaseQuantity } = cartReducer.actions;
 export default cartReducer.reducer;
