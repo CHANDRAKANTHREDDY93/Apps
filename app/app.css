@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "font-awesome/css/font-awesome.css";
 
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif,
@@ -8,6 +9,8 @@
 html,
 body {
   @apply bg-white dark:bg-gray-950;
+  width: 90%;
+  margin: 0 auto;
 
   @media (prefers-color-scheme: dark) {
     color-scheme: dark;
