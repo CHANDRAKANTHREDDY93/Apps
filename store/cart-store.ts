@@ -9,6 +9,11 @@ const cartStore = createSlice({
     initialState: [initProduct],
     reducers: {
         ...cartReducer
+    },
+    extraReducers: (builder) => {
+        builder.addCase('cartReducer/fetchProducts/fulfilled', (state, action) => {
+            state[0].products = action.payload;
+        });
     }
 });
 

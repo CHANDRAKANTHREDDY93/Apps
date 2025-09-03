@@ -1,7 +1,7 @@
 import { useReducer, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
-import { loggedIn } from "store/reducer/user-reducer";
+import { loggedIn, loggedOut } from "store/reducer/user-reducer";
 import type { AppDispatch } from "store/user-store";
 
 export default function Login() {
@@ -16,12 +16,14 @@ export default function Login() {
             method: 'POST',
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({email: email, password: password})
-        }).then(res => res.json())
-        .then((res) => {
+        }).then((res) => {
           console.log(res);
-          dispatch(loggedIn());
-          navigate("/app/home", { replace: true });
-          return;
+          if (res.status === 200) {
+            dispatch(loggedIn());
+            navigate("/app/home", { replace: true });
+          } else {
+            dispatch(loggedOut());
+          }
         })
         .catch(err => console.error(err));
     };

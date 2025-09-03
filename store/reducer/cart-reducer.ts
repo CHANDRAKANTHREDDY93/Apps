@@ -1,12 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
-import {
-  ADD_TO_CART,
-  DECREASE_QUANTITY,
-  GET_ALL_PRODUCTS,
-  INCREASE_QUANTITY,
-  REMOVE_FROM_CART,
-  UPDATE_CART,
-} from "store/actions/cart-action";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 export const initProduct = {
   numberCart: 0,
@@ -14,13 +6,18 @@ export const initProduct = {
   products: [],
 };
 
+export const fetchProducts = createAsyncThunk(
+  'cartReducer/fetchProducts',
+  async () => {
+    const response = await fetch('/api/products');
+    return await response.json();
+  }
+);
+
 const cartReducer = createSlice({
   name: 'cartReducer',
   initialState: initProduct,
   reducers: {
-    getAllProducts: (state = initProduct, action) => {
-      return { ...state, products: action.payload }
-    },
     addToCart: (state: any = initProduct, action) => {
       if (state.numberCart === 0) {
         const cart = {
@@ -89,8 +86,13 @@ const cartReducer = createSlice({
         }
       }
     }
-}
+  },
+  extraReducers: (builder) => {
+    builder.addCase(fetchProducts.fulfilled, (state, action) => {
+      state.products = action.payload;
+    });
+  } 
 });
 
-export const { addToCart, updateCart, getAllProducts, decreaseQuantity, increaseQuantity } = cartReducer.actions;
+export const { addToCart, updateCart, decreaseQuantity, increaseQuantity } = cartReducer.actions;
 export default cartReducer.reducer;

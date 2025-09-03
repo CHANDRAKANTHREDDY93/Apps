@@ -8,17 +8,11 @@ const userReducer = createSlice({
     name: 'userReducer',
     initialState: initState,
     reducers: {
-        loggedIn: function(state = initState) {
-            return {
-                ...state,
-                isLoggedIn: true
-            }
+        loggedIn: function(state) {
+            state.isLoggedIn = true;
         },
         loggedOut: function(state = initState) {
-            return {
-                ...state,
-                isLoggedIn: false
-            }
+            state.isLoggedIn = false;
         }
     }
 });
