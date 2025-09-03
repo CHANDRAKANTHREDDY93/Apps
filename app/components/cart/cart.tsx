@@ -10,7 +10,7 @@ export default function Cart () {
         dispatch(increaseQuantity({...product}));
     }
     const cartSelector = useSelector((item: any) => item.cartReducer)?.carts;
-    console.log(cartSelector);
+    
     return (
         <>
             <div className="bg-gray-200 mx-auto mt-3 pt-2 pb-2">
@@ -42,6 +42,12 @@ export default function Cart () {
                                 </div>
                             ))
                         }
+                        <div className="flex justify-end items-center pt-4">
+                            <h3 className="font-bold text-xl">Total Amount: </h3>
+                            <span className="px-2 font-bold text-xl">
+                                { cartSelector.reduce((acc: number, item: any) => acc + (item.quantity * item.price), 0)?.toFixed(2) }$
+                            </span>
+                        </div>
                     </div>
             }
             </div>
