@@ -6,7 +6,7 @@
     "build": "react-router build",
     "dev": "react-router dev",
     "start": "PORT=5173 HOST=0.0.0.0 react-router-serve ./build/server/index.js",
-    "prod": "react-router build production",
+    "prod": "vite build",
     "typecheckite build && ": "react-router typegen && tsc"
   },
   "dependencies": {
