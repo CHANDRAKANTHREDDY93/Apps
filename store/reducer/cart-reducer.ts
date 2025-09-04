@@ -11,7 +11,7 @@ export const initProduct = {
 export const fetchProducts = createAsyncThunk(
   'cartReducer/fetchProducts',
   async () => {
-    const response = await fetch(`${apiBase}/api/products`);
+    const response = await fetch(`${apiBase}/api/products`, { credentials: 'include' });
     return await response.json();
   }
 );

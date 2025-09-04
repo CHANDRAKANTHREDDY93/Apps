@@ -18,6 +18,7 @@ export default function SignUp() {
         await fetch(`${apiBase}/api/signup`, {
             method: 'POST',
             headers: { "Content-Type": "application/json" },
+            credentials: 'include',
             body: JSON.stringify({email: email, password: password, confirmPassword: confirmPassword, firstName: firstName, lastName: lastName})
         }).then((res) => {
             if (res.status === 201) {
