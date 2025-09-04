@@ -4,6 +4,8 @@ import { useNavigate } from "react-router";
 import { loggedIn, loggedOut } from "store/reducer/user-reducer";
 import type { AppDispatch } from "store/user-store";
 
+const apiBase = import.meta.env.VITE_API_BASE_URL;
+
 export default function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -12,7 +14,7 @@ export default function Login() {
 
     const login = async (event: Event) => {
         event.preventDefault();
-        await fetch("/api/login", {
+        await fetch(`${apiBase}/api/login`, {
             method: 'POST',
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({email: email, password: password})

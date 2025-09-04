@@ -1,5 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
+const apiBase = import.meta.env.VITE_API_BASE_URL;
+
 export const initProduct = {
   numberCart: 0,
   carts: [],
@@ -9,7 +11,7 @@ export const initProduct = {
 export const fetchProducts = createAsyncThunk(
   'cartReducer/fetchProducts',
   async () => {
-    const response = await fetch('/api/products');
+    const response = await fetch(`${apiBase}/api/products`);
     return await response.json();
   }
 );
