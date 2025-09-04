@@ -1,4 +1,6 @@
+import { Provider } from "react-redux";
 import { Welcome } from "../welcome/welcome";
+import { userStore } from "store/user-store";
 
 export function meta({}) {
   return [
@@ -8,5 +10,9 @@ export function meta({}) {
 }
 
 export default function Home() {
-  return <Welcome />;
+  return (
+        <Provider store={userStore}>
+          <Welcome />
+        </Provider>
+  );
 }

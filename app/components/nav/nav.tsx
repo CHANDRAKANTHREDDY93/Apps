@@ -2,19 +2,24 @@ import { NavLink, Outlet, useNavigate } from "react-router";
 
 import { NavLinks } from "./nav-link";
 import { useDispatch, useSelector } from "react-redux";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { loggedOut } from "store/reducer/user-reducer";
 
 export default function Nav() {
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const [loggedIn, setLoggedIn] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
 
     const toggleDropdown = () => {
         setIsOpen(!isOpen);
     };
     const isLoggedIn = useSelector((state) => state.reducer)?.isLoggedIn;
+
+    useEffect(() => {
+        setLoggedIn(isLoggedIn);
+    }, []);
     
     const handleLogin = () => {
         navigate("/login");
@@ -31,7 +36,7 @@ export default function Nav() {
             <div className="w-full">
                 <div className="flex justify-between">
                     <img src="../../../assets/logo.jpg" alt="My Shopping Cart" className="h-18 w-[96px] px-1 object-cover"></img>
-                    {isLoggedIn ? (
+                    {loggedIn ? (
                         <button className="cursor-pointer border-2 border-gray-700 m-2 w-[150px]" onClick={handleLogin}>
                             Login / Sign Up
                         </button>

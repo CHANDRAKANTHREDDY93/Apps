@@ -10,7 +10,8 @@ export function App() {
     return (
     <>
         <Routes>
-            <Route path={''} element={<Welcome />}></Route>
+            <Route path={''} element={<Nav />}></Route>
+             <Route path={'**'} element={<Nav />}></Route>
             <Route path='/login' element={
                 <Provider store={userStore}>
                     <Login />

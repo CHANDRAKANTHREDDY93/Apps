@@ -6,13 +6,15 @@
     "build": "react-router build",
     "dev": "react-router dev",
     "start": "PORT=5173 HOST=0.0.0.0 react-router-serve ./build/server/index.js",
-    "typecheck": "react-router typegen && tsc"
+    "prod": "react-router build production",
+    "typecheckite build && ": "react-router typegen && tsc"
   },
   "dependencies": {
     "@fortawesome/react-fontawesome": "^3.0.0",
     "@react-router/node": "^7.7.1",
     "@react-router/serve": "^7.7.1",
     "@reduxjs/toolkit": "^2.8.2",
+    "dotenv": "^17.2.2",
     "font-awesome": "^4.7.0",
     "isbot": "^5.1.27",
     "react": "^19.1.0",

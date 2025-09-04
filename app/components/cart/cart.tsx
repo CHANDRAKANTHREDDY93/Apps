@@ -15,7 +15,7 @@ export default function Cart () {
         <>
             <div className="bg-gray-200 mx-auto mt-3 pt-2 pb-2">
                 {
-                cartSelector.length === 0 ? <p className="text-center">No Items in the Cart</p> : 
+                cartSelector.length === 0 ? <p className="text-center text-gray-800">No Items in the Cart</p> : 
                     <div className="w-full p-2"> 
                         {
                             cartSelector.map((item: any) => (
