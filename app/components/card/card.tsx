@@ -32,7 +32,7 @@ export default function Card({ paginatedProducts, cartSelector }: any) {
                         <div className="w-1/4 outline-[#243c5a] overflow-hidden inset-shadow-2xs border-[#dbdbdb] px-2 mb-2" key={key}>
                             <img
                                 className="h-48 w-full max-w-96 p-2"
-                                src={`../../../assets/${product.category}/${product.image}.jpg`}
+                                src={`../../../assets/${product.category?.toLowerCase()}/${product.image}.jpg`}
                                 alt={product.description}
                             />
                             <div className="px-6 py-4">

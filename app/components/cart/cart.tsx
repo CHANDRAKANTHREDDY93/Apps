@@ -21,7 +21,7 @@ export default function Cart () {
                             cartSelector.map((item: any) => (
                                 <div className="flex justify-between pt-2">
                                     <div className="flex">
-                                        <img src={`../../../assets/${item.category}/${item.image}.jpg`} className="h-48 w-[292px] p-2" alt={item.description}></img>
+                                        <img src={`../../../assets/${item.category?.toLowerCase()}/${item.image}.jpg`} className="h-48 w-[292px] p-2" alt={item.description}></img>
                                         <div className="flex font-bold text-x px-2 text-gray-800">{item.name}
                                             {/* <div className="flex">{item.description}</div> */}
                                         </div>
