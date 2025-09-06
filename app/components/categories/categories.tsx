@@ -10,6 +10,7 @@ export default function Categories() {
     const productSelector = useSelector(item => item.cartReducer)?.products || {};
     const categorySelector = useSelector(item => item.categoryReducer).category || 'fruits';
     const categories = useSelector(item => item.categoryReducer).products || [];
+    const cartSelector = useSelector(item => item.cartReducer)?.carts;
 
     useEffect(() => {
         if (productSelector[categorySelector]?.length) {
@@ -31,7 +32,7 @@ export default function Categories() {
                         categories.length &&
                              (
                                 <div className="flex flex-wrap">
-                                    <Card paginatedProducts={categories} />
+                                    <Card paginatedProducts={categories} cartSelector={cartSelector}/>
                                 </div>
                             )
                     }
