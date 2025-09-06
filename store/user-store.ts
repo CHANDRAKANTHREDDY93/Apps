@@ -1,11 +1,13 @@
 import { configureStore, Tuple } from '@reduxjs/toolkit';
 import userReducer from './reducer/user-reducer';
 import cartReducer from './reducer/cart-reducer';
+import categoryReducer from './reducer/category-reducer';
 
 export const userStore = configureStore({
     reducer: {
         reducer: userReducer,
-        cartReducer: cartReducer
+        cartReducer: cartReducer,
+        categoryReducer: categoryReducer
     },
     // middleware: () => new Tuple(additionalMiddleware, logger),
 });

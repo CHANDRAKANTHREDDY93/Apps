@@ -29,14 +29,14 @@ export default function Card({ paginatedProducts, cartSelector }: any) {
                     const cartItem = cartMap.get(product._id);
 
                     return (
-                        <div className="w-1/4 rounded overflow-hidden shadow-lg border-[#cacaca] px-2" key={key}>
+                        <div className="w-1/4 outline-[#243c5a] overflow-hidden inset-shadow-2xs border-[#dbdbdb] px-2 mb-2" key={key}>
                             <img
                                 className="h-48 w-full max-w-96 p-2"
                                 src={`../../../assets/${product.category}/${product.image}.jpg`}
                                 alt={product.description}
                             />
                             <div className="px-6 py-4">
-                                <div className="font-bold text-xl mb-2 text-center space-wrap">
+                                <div className="font-bold text-xl mb-2 text-center whitespace-nowrap overflow-hidden text-ellipsis hover:overflow-visible group-hover:opacity-100 text-nowrap" title={product.name}>
                                     {product.name}
                                 </div>
                             </div>

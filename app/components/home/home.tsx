@@ -2,11 +2,15 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProducts } from "store/reducer/cart-reducer";
 import Card from "../card/card";
+import { useQuery } from "@tanstack/react-query";
+import { setCategory } from "store/reducer/category-reducer";
+import { useNavigate } from "react-router";
 
 const ITEMS_PER_ROW = 4;
 
 export default function Home() {
     const [currentPages, setCurrentPages] = useState<{ [key: string]: number }>({});
+    const navigate = useNavigate();
     const dispatch = useDispatch<any>();
     const cartSelector = useSelector(item => item.cartReducer)?.carts;
     const productSelector = useSelector(item => item.cartReducer)?.products || {};
@@ -40,9 +44,17 @@ export default function Home() {
         }));
     };
 
+    const handleAll = (category: string) => {
+       dispatch(setCategory({
+            products: productSelector[category],
+            category: category
+        }));
+        navigate('/app/categories');
+    }
+
     return (
         <>
-        <div className="bg-gray-200 pt-2 pb-2 text-gray-800">
+        <div className="bg-gray-100 pt-2 pb-2 text-gray-800">
             <div>
                 {Object.keys(productSelector).map(category => {
                     const products = productSelector[category] || [];
@@ -58,7 +70,7 @@ export default function Home() {
                             <div className="flex justify-between w-full p-2">
                                 <h3 className="capitalize font-bold px-2">{category}</h3>
                                 <div>
-                                    <button className="cursor-pointer underline px-2 text-blue-800">View All</button>
+                                    <button className="cursor-pointer underline px-2 text-blue-800" onClick={() => handleAll(category)}>View All</button>
                                     <button className="px-1 mr-1 border-2 border-gray-700 cursor-pointer"
                                         onClick={() => handlePrev(category, totalPages)}
                                         disabled={currentPage === 1}>
