@@ -4,6 +4,8 @@ import { NavLinks } from "./nav-link";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { loggedOut } from "store/reducer/user-reducer";
+import ChatBot from "../chat-bot/chat-bot";
+import logoUrl from '../../../assets/logo.jpg';
 
 export default function Nav() {
 
@@ -35,7 +37,7 @@ export default function Nav() {
                 <nav className="flex flex-wrap justify-between w-full flex-row bg-gray-800 text-white gap-4">
                     <div className="w-full">
                         <div className="flex justify-between">
-                            <img src="../../../assets/logo.jpg" alt="My Shopping Cart" className="h-18 w-[96px] px-1 object-cover top-0 left-0 z-0"></img>
+                            <img src={logoUrl} alt="My Shopping Cart" className="h-18 w-[96px] px-1 object-cover top-0 left-0 z-0"></img>
                             {!loggedIn ? (
                                 <button className="cursor-pointer border-2 border-gray-700 m-2 w-[150px]" onClick={handleLogin}>
                                     Login / Sign Up
@@ -104,6 +106,10 @@ export default function Nav() {
             </div>
 
             <Outlet />
+            <footer className="bg-gray-800 text-white text-center p-4 mt-4">
+                &copy; {new Date().getFullYear()} My Shopping Cart. All rights reserved.
+                <ChatBot />
+            </footer>
         </>
     );
 }

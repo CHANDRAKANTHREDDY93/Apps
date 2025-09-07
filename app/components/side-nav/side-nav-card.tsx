@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { setCategory } from 'store/reducer/category-reducer';
 
-export default function SideNavCard({ productSelector, categorySelector }) {
+export default function SideNavCard({ productSelector = {} as any, categorySelector }) {
     const [isCategoryOpen, setIsCategoryOpen] = useState(true);
     const [isPriceOpen, setIsPriceOpen] = useState(true);
     const dispatch = useDispatch<any>();
@@ -18,13 +18,14 @@ export default function SideNavCard({ productSelector, categorySelector }) {
         <div className="relative w-full">
             {/* Category Dropdown */}
             <h3 className="font-bold mb-2 text-gray-800">Select A Category</h3>
-            <button
-                onClick={() => setIsCategoryOpen(!isCategoryOpen)}
-                className="w-full px-2.5 lg:py-1.5 xl:py-2 leading-sm flex items-center justify-between bg-[#cacaca] cursor-pointer rounded-t-2xs"
-            >
-                <h3 className="font-bold text-gray-800 capitalize">{categorySelector.includes('_') ? categorySelector.replace('_', ' & ') : categorySelector}</h3>
-                <i className={`fa fa-caret-down ${isCategoryOpen ? 'transform rotate-180' : ''}`}></i>
-            </button>
+            { Object.keys(productSelector)?.length > 0 && 
+                <button
+                    onClick={() => setIsCategoryOpen(!isCategoryOpen)}
+                    className="w-full px-2.5 lg:py-1.5 xl:py-2 leading-sm flex items-center justify-between bg-[#cacaca] cursor-pointer rounded-t-2xs">
+                    <h3 className="font-bold text-gray-800 capitalize">{categorySelector.includes('_') ? categorySelector.replace('_', ' & ') : categorySelector}</h3>
+                    <i className={`fa fa-caret-down ${isCategoryOpen ? 'transform rotate-180' : ''}`}></i>
+                </button>
+            }
 
             {isCategoryOpen && (
                 <div className="mb-2.5">
@@ -36,7 +37,7 @@ export default function SideNavCard({ productSelector, categorySelector }) {
                                     handleCategoryClick(category);
                                 }}
                                 className={`mb-2 cursor-pointer capitalize underline hover:text-blue-600 py-1
-                    ${category === categorySelector ? 'font-bold text-green-800' : 'text-gray-600'}`}
+                    ${category === categorySelector ? 'font-bold text-emerald-500' : 'text-gray-600'}`}
                             >
                                 {category.includes('_') ? category.replace('_', ' & ') : category}
                             </li>

@@ -1,6 +1,8 @@
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart, decreaseQuantity, increaseQuantity, updateCart } from "store/reducer/cart-reducer";
 
+const images = import.meta.glob('../../../assets/**/*.jpg', { eager: true });
+
 export default function Card({ paginatedProducts, cartSelector }: any) {
 
     const dispatch = useDispatch<any>();
@@ -27,12 +29,15 @@ export default function Card({ paginatedProducts, cartSelector }: any) {
             {
                 paginatedProducts.map((product: any, key: number) => {
                     const cartItem = cartMap.get(product._id);
+                    const imagePath = `../../../assets/${product.category?.toLowerCase()}/${product.image}.jpg`;
+                    const imageSrc = images[imagePath]?.default;
 
                     return (
                         <div className="w-1/4 outline-[#243c5a] overflow-hidden inset-shadow-2xs border-[#dbdbdb] px-2 mb-2" key={key}>
+                               
                             <img
                                 className="h-48 w-full max-w-96 p-2"
-                                src={`../../../assets/${product.category?.toLowerCase()}/${product.image}.jpg`}
+                                src={imageSrc}
                                 alt={product.description}
                             />
                             <div className="px-6 py-4">

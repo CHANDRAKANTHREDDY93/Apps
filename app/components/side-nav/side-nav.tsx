@@ -20,13 +20,6 @@ export default function SideNav () {
         }
     }, [dispatch, categorySelector, productSelector]);
 
-    const handleCategoryClick = (category: string) => {
-        dispatch(setCategory({
-            products: productSelector[category],
-            category: category
-        }));
-    }
-
     return (
         <div className="w-[400px] bg-gray-200 pt-4 mx-1">
             <SideNavCard productSelector={productSelector} categorySelector={categorySelector} />

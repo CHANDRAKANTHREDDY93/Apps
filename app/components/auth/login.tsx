@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
 import { loggedIn, loggedOut } from "store/reducer/user-reducer";
 import type { AppDispatch } from "store/user-store";
+import logoUrl from '../../../assets/logo.jpg';
 
 const apiBase = import.meta.env.VITE_API_BASE_URL;
 
@@ -35,8 +36,8 @@ export default function Login() {
         <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <img
-            alt="Your Company"
-            src="../../assets/logo.jpg"
+            alt="Shopping Cart"
+            src={logoUrl}
             className="mx-auto h-40 w-auto"
           />
           <h2 className="mt-2 text-center text-2xl/9 text-gray-500 font-bold tracking-tight">Sign in to your account</h2>

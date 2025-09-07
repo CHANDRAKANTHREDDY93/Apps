@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { decreaseQuantity, increaseQuantity } from "store/reducer/cart-reducer";
 
+const images = import.meta.glob('../../../assets/**/*.jpg', { eager: true });
 export default function Cart () {
     const dispatch = useDispatch();
     const handleDecrement = (product: any) => {
@@ -16,30 +17,31 @@ export default function Cart () {
             <div className="bg-gray-200 mx-auto mt-3 pt-2 pb-2">
                 {
                 cartSelector.length === 0 ? <p className="text-center text-gray-800">No Items in the Cart</p> : 
-                    <div className="w-full p-2"> 
+                    <div className="w-full p-2" >
                         {
-                            cartSelector.map((item: any) => (
+                            cartSelector.map((item: any) => {
+                                const imagePath = `../../../assets/${item.category?.toLowerCase()}/${item.image}.jpg`;
+                                const imageSrc = images[imagePath]?.default;
                                 <div className="flex justify-between pt-2">
-                                    <div className="flex">
-                                        <img src={`../../../assets/${item.category?.toLowerCase()}/${item.image}.jpg`} className="h-48 w-[292px] p-2" alt={item.description}></img>
-                                        <div className="flex font-bold text-x px-2 text-gray-800">{item.name}
-                                            {/* <div className="flex">{item.description}</div> */}
-                                        </div>
-                                    </div>
-                                    <div className="flex flex-wrap items-center justify-center">
-                                        <div className="border-1 h-8 max-w-36 text-gray-800">
-                                            <button className="cursor-pointer px-4" onClick={() => handleDecrement(item)}>
-                                                <i className="fa fa-minus" ></i>
-                                            </button>
-                                            <span className="px-2" >{item.quantity}</span>
-                                            <button className="cursor-pointer px-4" onClick={() => handleIncrement(item)}>
-                                                <i className="fa fa-plus"></i>
-                                            </button>
-                                        </div>
-                                        <div className="flex justify-center items-center px-2 text-gray-800">{item.quantity * item.price}$</div>
+                                <div className="flex">
+                                    <img src={imageSrc} className="h-48 w-[292px] p-2" alt={item.description}></img>
+                                    <div className="flex font-bold text-x px-2 text-gray-800">{item.name}
                                     </div>
                                 </div>
-                            ))
+                                <div className="flex flex-wrap items-center justify-center">
+                                    <div className="border-1 h-8 max-w-36 text-gray-800">
+                                        <button className="cursor-pointer px-4" onClick={() => handleDecrement(item)}>
+                                            <i className="fa fa-minus" ></i>
+                                        </button>
+                                        <span className="px-2" >{item.quantity}</span>
+                                        <button className="cursor-pointer px-4" onClick={() => handleIncrement(item)}>
+                                            <i className="fa fa-plus"></i>
+                                        </button>
+                                    </div>
+                                    <div className="flex justify-center items-center px-2 text-gray-800">{item.quantity * item.price}$</div>
+                                </div>
+                                </div>
+})
                         }
                         <div className="flex justify-end items-center pt-4 text-gray-800">
                             <h3 className="font-bold text-xl">Total Amount: </h3>
