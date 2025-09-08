@@ -18,6 +18,7 @@ export default function Nav() {
         setIsOpen(!isOpen);
     };
     const isLoggedIn = useSelector((state) => state.reducer)?.isLoggedIn;
+    const cartSelector = useSelector((item: any) => item.cartReducer)?.carts;
 
     useEffect(() => {
         setLoggedIn(isLoggedIn);
@@ -95,8 +96,12 @@ export default function Nav() {
                             {NavLinks.map(({ id, href, text, className, icon }) => (
                                 <li key={id} className={className}>
                                     <NavLink to={href} className="flex items-center">
-                                        <i className={icon}></i>
-                                        {text}
+                                        <i className={`text-sm ${icon}`}></i>
+                                        {text === 'Cart' && cartSelector.length > 0 ? 
+                                        <span className="bg-red-500 text-white text-sm font-bold px-2 py-0.5 rounded-full">
+                                            {cartSelector?.length}
+                                        </span> : <span>{text}</span>
+                                        }
                                     </NavLink>
                                 </li>
                             ))}

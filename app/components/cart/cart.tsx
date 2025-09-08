@@ -1,5 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
-import { decreaseQuantity, increaseQuantity } from "store/reducer/cart-reducer";
+import { decreaseQuantity, increaseQuantity, removeFromCart } from "store/reducer/cart-reducer";
+import resolveImage from "~/util/products.util";
 
 const images = import.meta.glob('../../../assets/**/*.jpg', { eager: true });
 export default function Cart () {
@@ -10,7 +11,10 @@ export default function Cart () {
     const handleIncrement = (product: any) => {
         dispatch(increaseQuantity({...product}));
     }
-    const cartSelector = useSelector((item: any) => item.cartReducer)?.carts;
+    const handleRemoveItem = (product: any) => {
+        dispatch(removeFromCart(product))
+    };
+    const cartSelector = useSelector((item: any) => item.cartReducer)?.carts
     
     return (
         <>
@@ -19,14 +23,19 @@ export default function Cart () {
                 cartSelector.length === 0 ? <p className="text-center text-gray-800">No Items in the Cart</p> : 
                     <div className="w-full p-2" >
                         {
-                            cartSelector.map((item: any) => {
-                                const imagePath = `../../../assets/${item.category?.toLowerCase()}/${item.image}.jpg`;
-                                const imageSrc = images[imagePath]?.default;
+                            cartSelector.map((item: any) => (
                                 <div className="flex justify-between pt-2">
                                 <div className="flex">
-                                    <img src={imageSrc} className="h-48 w-[292px] p-2" alt={item.description}></img>
-                                    <div className="flex font-bold text-x px-2 text-gray-800">{item.name}
+                                    <img src={resolveImage(item, images)} className="h-48 w-[292px] p-2" alt={item.description}></img>
+                                    <div className="px-2 mt-4 flex flex-col justify-between">
+                                        <span className="font-bold text-gray-800 text-x"> {item.name} </span>
+                                        <div className="flex text-blue-800">
+                                            <button className="cursor-pointer hover:underline px-2" onClick={() => handleRemoveItem(item)}>Delete</button>
+                                            <div className="w-[1px] h-full bg-gray-300"></div>
+                                            <button className="cursor-pointer hover:underline px-2">Save for later</button>
+                                        </div>
                                     </div>
+                                    
                                 </div>
                                 <div className="flex flex-wrap items-center justify-center">
                                     <div className="border-1 h-8 max-w-36 text-gray-800">
@@ -41,7 +50,7 @@ export default function Cart () {
                                     <div className="flex justify-center items-center px-2 text-gray-800">{item.quantity * item.price}$</div>
                                 </div>
                                 </div>
-})
+                            ))
                         }
                         <div className="flex justify-end items-center pt-4 text-gray-800">
                             <h3 className="font-bold text-xl">Total Amount: </h3>

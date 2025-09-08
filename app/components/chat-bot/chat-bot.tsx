@@ -42,13 +42,11 @@ export default function ChatBot () {
                     </div> : 
                     <div className="mt-2 flex justify-end">
                         <button className="text-white px-4 py-2 rounded-lg" onClick={() => setIsOpen(!isOpen)}>
-                            <button id="chat-button" className="fixed bottom-4 right-4">
                             <img
                                 src={chatBtn}
                                 alt="Chat with Mickey"
                                 className="h-16 w-16 rounded-full shadow-lg animate-bounce bg-emerald-500"
                             />
-                            </button>
                         </button>
                     </div>
                 }

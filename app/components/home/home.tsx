@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProducts } from "store/reducer/cart-reducer";
 import Card from "../card/card";
-import { useQuery } from "@tanstack/react-query";
 import { setCategory } from "store/reducer/category-reducer";
 import { useNavigate } from "react-router";
+import { fetchItems } from "store/reducer/home-reducer";
 
 const ITEMS_PER_ROW = 4;
 
@@ -13,11 +12,11 @@ export default function Home() {
     const navigate = useNavigate();
     const dispatch = useDispatch<any>();
     const cartSelector = useSelector(item => item.cartReducer)?.carts;
-    const productSelector = useSelector(item => item.cartReducer)?.products || {};
+    const productSelector = useSelector(item => item.homePageReducer)?.products || {};
 
     useEffect(() => {
         if (!productSelector || Object.keys(productSelector).length === 0) {
-            dispatch(fetchProducts());
+            dispatch(fetchItems());
         }
     }, [dispatch, productSelector]);
 

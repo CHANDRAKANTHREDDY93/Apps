@@ -1,5 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart, decreaseQuantity, increaseQuantity, updateCart } from "store/reducer/cart-reducer";
+import resolveImage from "~/util/products.util";
 
 const images = import.meta.glob('../../../assets/**/*.jpg', { eager: true });
 
@@ -29,15 +30,12 @@ export default function Card({ paginatedProducts, cartSelector }: any) {
             {
                 paginatedProducts.map((product: any, key: number) => {
                     const cartItem = cartMap.get(product._id);
-                    const imagePath = `../../../assets/${product.category?.toLowerCase()}/${product.image}.jpg`;
-                    const imageSrc = images[imagePath]?.default;
 
                     return (
                         <div className="w-1/4 outline-[#243c5a] overflow-hidden inset-shadow-2xs border-[#dbdbdb] px-2 mb-2" key={key}>
-                               
                             <img
                                 className="h-48 w-full max-w-96 p-2"
-                                src={imageSrc}
+                                src={resolveImage(product, images)}
                                 alt={product.description}
                             />
                             <div className="px-6 py-4">
@@ -51,7 +49,7 @@ export default function Card({ paginatedProducts, cartSelector }: any) {
 
                             {cartItem ? (
                                 <div
-                                    className="transition-all duration-300 ease-in-out transform scale-100 opacity-100 border-1 h-8 flex justify-center items-center"
+                                    className="transition-all duration-300 ease-in-out transform scale-100 opacity-100 border-1 h-12 flex justify-center items-center"
                                     key={`quantity-${product._id}`}
                                 >
                                     <button className="cursor-pointer px-4 w-24" onClick={() => handleDecrement(cartItem)}>
