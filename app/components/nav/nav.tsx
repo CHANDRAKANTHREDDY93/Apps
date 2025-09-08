@@ -109,11 +109,9 @@ export default function Nav() {
                         </ul>
                     </div>
                 </nav>
-
+                <Alert />
+                <Outlet />
             </div>
-            <Alert />
-
-            <Outlet />
             <footer className="bg-gray-800 text-white text-center p-4 mt-4 max-w-screen-xl mx-auto">
                 &copy; {new Date().getFullYear()} My Shopping Cart. All rights reserved.
                 <ChatBot />
