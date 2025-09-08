@@ -1,60 +1,98 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProducts } from "store/reducer/cart-reducer";
 import Card from "../card/card";
+import { setCategory } from "store/reducer/category-reducer";
+import { useNavigate } from "react-router";
+import { fetchItems } from "store/reducer/home-reducer";
 
 const ITEMS_PER_ROW = 4;
 
 export default function Home() {
-    const [ products, setProducts ] = useState([]);
-    const [currentPage, setCurrentPage] = useState(1);
+    const [currentPages, setCurrentPages] = useState<{ [key: string]: number }>({});
+    const navigate = useNavigate();
     const dispatch = useDispatch<any>();
     const cartSelector = useSelector(item => item.cartReducer)?.carts;
-    const productSelector = useSelector(item => item.cartReducer)?.products;
-      // Pagination logic
-    const totalPages = productSelector ? Math.ceil(productSelector.length / ITEMS_PER_ROW) : 1;
-    const paginatedProducts = productSelector
-        ? productSelector.slice((currentPage - 1) * ITEMS_PER_ROW, currentPage * ITEMS_PER_ROW)
-        : [];
+    const productSelector = useSelector(item => item.homePageReducer)?.products || {};
 
     useEffect(() => {
-        // Only fetch if products are not already loaded
-        if (!productSelector || productSelector.length === 0) {
-            dispatch(fetchProducts());
+        if (!productSelector || Object.keys(productSelector).length === 0) {
+            dispatch(fetchItems());
         }
     }, [dispatch, productSelector]);
 
+    // Initialize current page for each category
     useEffect(() => {
-        setProducts(productSelector);
+        const pages: { [key: string]: number } = {};
+        Object.keys(productSelector).forEach(category => {
+            pages[category] = 1;
+        });
+        setCurrentPages(pages);
     }, [productSelector]);
-    // useEffect(() --- IGNORE ---
 
-    const handlePrev = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
-    const handleNext = () => setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+    const handlePrev = (category: string, totalPages: number) => {
+        setCurrentPages(prev => ({
+            ...prev,
+            [category]: Math.max((prev[category] || 1) - 1, 1)
+        }));
+    };
+
+    const handleNext = (category: string, totalPages: number) => {
+        setCurrentPages(prev => ({
+            ...prev,
+            [category]: Math.min((prev[category] || 1) + 1, totalPages)
+        }));
+    };
+
+    const handleAll = (category: string) => {
+       dispatch(setCategory({
+            products: productSelector[category],
+            category: category
+        }));
+        navigate('/app/categories');
+    }
 
     return (
         <>
-        <div className="bg-gray-200 pt-2 pb-2 text-gray-800">
-            <div className="">
-               <div className="flex justify-between w-full p-2">
-                    <h3>My Smart Basket</h3>
-                    <div className="">
-                        <a href="/app/cart" className="underline px-2">View All</a>
-                        <button className="px-1 mr-1 border-2 border-gray-700 cursor-pointer" onClick={handlePrev} disabled={currentPage === 1} >
-                            <i className="fa fa-arrow-left"></i>
-                        </button>
-                        <button className="px-1 border-2 border-gray-700" onClick={handleNext} disabled={currentPage === totalPages} >
-                            <i className="fa fa-arrow-right"></i>
-                        </button>
-                    </div>
-               </div>
-               {/* Product Card */}
-               {
-               paginatedProducts.length === 0 ? <p className="text-center">No Products Available</p> :
-                <div className="flex flex-wrap px-2 pb-2">
-                    <Card paginatedProducts={paginatedProducts} cartSelector={cartSelector} />
-                </div>
-            }
+        <div className="bg-gray-100 pt-2 pb-2 text-gray-800">
+            <div>
+                {Object.keys(productSelector).map(category => {
+                    const products = productSelector[category] || [];
+                    const totalPages = Math.ceil(products.length / ITEMS_PER_ROW);
+                    const currentPage = currentPages[category] || 1;
+                    const paginatedProducts = products.slice(
+                        (currentPage - 1) * ITEMS_PER_ROW,
+                        currentPage * ITEMS_PER_ROW
+                    );
+
+                    return (
+                        <div key={category} className="mb-8">
+                            <div className="flex justify-between w-full p-2">
+                                <h3 className="capitalize font-bold px-2">{category}</h3>
+                                <div>
+                                    <button className="cursor-pointer underline px-2 text-blue-800" onClick={() => handleAll(category)}>View All</button>
+                                    <button className="px-1 mr-1 border-2 border-gray-700 cursor-pointer"
+                                        onClick={() => handlePrev(category, totalPages)}
+                                        disabled={currentPage === 1}>
+                                        <i className="fa fa-arrow-left"></i>
+                                    </button>
+                                    <button className="px-1 border-2 border-gray-700"
+                                        onClick={() => handleNext(category, totalPages)}
+                                        disabled={currentPage === totalPages}>
+                                        <i className="fa fa-arrow-right"></i>
+                                    </button>
+                                    <span className="ml-2 font-bold">Page {currentPage} of {totalPages}</span>
+                                </div>
+                            </div>
+                            {paginatedProducts.length === 0 ? (
+                                <p className="text-center">No Products Available</p>
+                            ) : (
+                                <div className="flex flex-wrap px-2 pb-2 shadow-lg">
+                                    <Card paginatedProducts={paginatedProducts} cartSelector={cartSelector} />
+                                </div>
+                            )}
+                        </div>
+                    );
+                })}
             </div>
         </div>
         </>

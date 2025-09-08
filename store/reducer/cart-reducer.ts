@@ -1,5 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
+const apiBase = import.meta.env.VITE_API_BASE_URL;
+
 export const initProduct = {
   numberCart: 0,
   carts: [],
@@ -9,8 +11,20 @@ export const initProduct = {
 export const fetchProducts = createAsyncThunk(
   'cartReducer/fetchProducts',
   async () => {
-    const response = await fetch('/api/products');
-    return await response.json();
+    const response = await fetch(`${apiBase}/api/products`, { credentials: 'include' });
+    const products = await response.json();
+
+    // Group products by category
+    const categories: Record<string, any[]> = {};
+    products.forEach((product: any) => {
+      const category = product.category || "uncategorized";
+      if (!categories[category]) {
+        categories[category] = [];
+      }
+      categories[category].push(product);
+    });
+
+    return categories;
   }
 );
 
@@ -19,40 +33,42 @@ const cartReducer = createSlice({
   initialState: initProduct,
   reducers: {
     addToCart: (state: any = initProduct, action) => {
-      if (state.numberCart === 0) {
+      if (state.carts?.length === 0) {
         const cart = {
-          id: action.payload.id,
+          _id: action.payload._id,
           quantity: action.payload.quantity,
           name: action.payload.name,
           image: action.payload.image,
           price: action.payload.price,
-          description: action.payload.description
+          description: action.payload.description,
+          category: action.payload.category
         }
         state.numberCart++;
         state.carts.push(cart);
       } else {
         let check = false;
         state.carts.forEach((item: any, key: any) => {
-          if (item.id === action.payload.id) {
+          if (item._id === action.payload._id) {
               state.carts[key].quantity++;
               check = true;
           }
         });
         if (!check) {
           const cart = {
-            id: action.payload.id,
+            _id: action.payload._id,
             quantity: 1,
             name: action.payload.name,
             image: action.payload.image,
             price: action.payload.price,
-            description: action.payload.description
+            description: action.payload.description,
+            category: action.payload.category
           }
           state.carts.push(cart);
         }
       }
     },
     updateCart: (state: any, action) => {
-      const itemIndex = state.carts.findIndex((item: any) => item.image === action.payload.image);
+      const itemIndex = state.carts.findIndex((item: any) => item._id === action.payload._id);
       if (itemIndex >= 0) {
         state.carts[itemIndex] = {
           ...state.carts[itemIndex],
@@ -63,10 +79,10 @@ const cartReducer = createSlice({
       }
     },
     removeFromCart: (state = initProduct, action) => {
-
+      state.carts = state.carts.filter((item: any) => item._id !== action.payload._id)
     },
     increaseQuantity: (state: any = initProduct, action) => {
-      const itemIndex = state.carts.findIndex((item: any) => item.image === action.payload.image);
+      const itemIndex = state.carts.findIndex((item: any) => item._id === action.payload._id);
       if (itemIndex >= 0) {
         state.carts[itemIndex] = {
           ...state.carts[itemIndex],
@@ -75,7 +91,7 @@ const cartReducer = createSlice({
       }
     },
     decreaseQuantity: (state: any = initProduct, action) => {
-      const itemIndex = state.carts.findIndex((item: any) => item.image === action.payload.image);
+      const itemIndex = state.carts.findIndex((item: any) => item._id === action.payload._id);
       if (itemIndex >= 0) {
         state.carts[itemIndex] = {
           ...state.carts[itemIndex],
@@ -94,5 +110,5 @@ const cartReducer = createSlice({
   } 
 });
 
-export const { addToCart, updateCart, decreaseQuantity, increaseQuantity } = cartReducer.actions;
+export const { addToCart, updateCart, decreaseQuantity, increaseQuantity, removeFromCart } = cartReducer.actions;
 export default cartReducer.reducer;

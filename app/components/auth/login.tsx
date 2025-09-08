@@ -1,8 +1,11 @@
-import { useReducer, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
 import { loggedIn, loggedOut } from "store/reducer/user-reducer";
 import type { AppDispatch } from "store/user-store";
+import logoUrl from '../../../assets/logo.jpg';
+
+const apiBase = import.meta.env.VITE_API_BASE_URL;
 
 export default function Login() {
     const [email, setEmail] = useState('');
@@ -12,10 +15,11 @@ export default function Login() {
 
     const login = async (event: Event) => {
         event.preventDefault();
-        await fetch("/api/login", {
+        await fetch(`${apiBase}/api/login`, {
             method: 'POST',
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({email: email, password: password})
+            body: JSON.stringify({email: email, password: password}),
+            credentials: 'include'
         }).then((res) => {
           console.log(res);
           if (res.status === 200) {
@@ -32,17 +36,17 @@ export default function Login() {
         <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <img
-            alt="Your Company"
-            src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500"
-            className="mx-auto h-10 w-auto"
+            alt="Shopping Cart"
+            src={logoUrl}
+            className="mx-auto h-40 w-auto"
           />
-          <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight">Sign in to your account</h2>
+          <h2 className="mt-2 text-center text-2xl/9 text-gray-500 font-bold tracking-tight">Sign in to your account</h2>
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
           <form onSubmit={(event) => login(event)} className="space-y-6">
             <div>
-              <label htmlFor="email" className="block text-sm/6 font-medium">
+              <label htmlFor="email" className="block text-sm/6 font-medium text-gray-500">
                 Email address
               </label>
               <div className="mt-2">
@@ -60,7 +64,7 @@ export default function Login() {
 
             <div>
               <div className="flex items-center justify-between">
-                <label htmlFor="password" className="block text-sm/6 font-medium">
+                <label htmlFor="password" className="block text-sm/6 font-medium text-gray-500">
                   Password
                 </label>
                 <div className="text-sm">
