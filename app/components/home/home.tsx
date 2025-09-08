@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Card from "../card/card";
 import { setCategory } from "store/reducer/category-reducer";
@@ -9,14 +9,16 @@ const ITEMS_PER_ROW = 4;
 
 export default function Home() {
     const [currentPages, setCurrentPages] = useState<{ [key: string]: number }>({});
+    const hasFetched = useRef(false);
     const navigate = useNavigate();
     const dispatch = useDispatch<any>();
     const cartSelector = useSelector(item => item.cartReducer)?.carts;
     const productSelector = useSelector(item => item.homePageReducer)?.products || {};
 
     useEffect(() => {
-        if (!productSelector || Object.keys(productSelector).length === 0) {
+        if ((!productSelector || Object.keys(productSelector).length === 0) && !hasFetched.current) {
             dispatch(fetchItems());
+            hasFetched.current = true;
         }
     }, [dispatch, productSelector]);
 
@@ -44,7 +46,7 @@ export default function Home() {
     };
 
     const handleAll = (category: string) => {
-       dispatch(setCategory({
+        dispatch(setCategory({
             products: productSelector[category],
             category: category
         }));
@@ -53,8 +55,7 @@ export default function Home() {
 
     return (
         <>
-        <div className="bg-gray-100 pt-2 pb-2 text-gray-800">
-            <div>
+            <div className="bg-gray-100 pt-2 pb-2 text-gray-800">
                 {Object.keys(productSelector).map(category => {
                     const products = productSelector[category] || [];
                     const totalPages = Math.ceil(products.length / ITEMS_PER_ROW);
@@ -65,36 +66,54 @@ export default function Home() {
                     );
 
                     return (
-                        <div key={category} className="mb-8">
-                            <div className="flex justify-between w-full p-2">
-                                <h3 className="capitalize font-bold px-2">{category}</h3>
-                                <div>
-                                    <button className="cursor-pointer underline px-2 text-blue-800" onClick={() => handleAll(category)}>View All</button>
-                                    <button className="px-1 mr-1 border-2 border-gray-700 cursor-pointer"
+                        <div key={category} className="mb-8 px-4 sm:px-6 lg:px-8">
+                            {/* Header & Pagination Controls */}
+                            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 p-2">
+                                <h3 className="capitalize font-bold text-lg text-gray-800">{category}</h3>
+
+                                <div className="flex flex-wrap items-center gap-2">
+                                    <button
+                                        className="underline text-blue-800 text-sm sm:text-base"
+                                        onClick={() => handleAll(category)}
+                                    >
+                                        View All
+                                    </button>
+
+                                    <button
+                                        className="px-2 py-1 border border-gray-700 rounded disabled:opacity-50"
                                         onClick={() => handlePrev(category, totalPages)}
-                                        disabled={currentPage === 1}>
+                                        disabled={currentPage === 1}
+                                    >
                                         <i className="fa fa-arrow-left"></i>
                                     </button>
-                                    <button className="px-1 border-2 border-gray-700"
+
+                                    <button
+                                        className="px-2 py-1 border border-gray-700 rounded disabled:opacity-50"
                                         onClick={() => handleNext(category, totalPages)}
-                                        disabled={currentPage === totalPages}>
+                                        disabled={currentPage === totalPages}
+                                    >
                                         <i className="fa fa-arrow-right"></i>
                                     </button>
-                                    <span className="ml-2 font-bold">Page {currentPage} of {totalPages}</span>
+
+                                    <span className="font-semibold text-sm sm:text-base">
+                                        Page {currentPage} of {totalPages}
+                                    </span>
                                 </div>
                             </div>
+
+                            {/* Product Grid */}
                             {paginatedProducts.length === 0 ? (
-                                <p className="text-center">No Products Available</p>
+                                <p className="text-center text-gray-600">No Products Available</p>
                             ) : (
-                                <div className="flex flex-wrap px-2 pb-2 shadow-lg">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 px-2 pb-4">
                                     <Card paginatedProducts={paginatedProducts} cartSelector={cartSelector} />
                                 </div>
                             )}
                         </div>
+
                     );
                 })}
             </div>
-        </div>
         </>
     );
 }

@@ -6,12 +6,22 @@ export const initProduct = {
   numberCart: 0,
   carts: [],
   products: [],
+  errorResponses: []
 };
 
 export const fetchProducts = createAsyncThunk(
   'cartReducer/fetchProducts',
   async () => {
     const response = await fetch(`${apiBase}/api/products`, { credentials: 'include' });
+    console.log(response);
+    if (!response.ok) {
+      return {
+        error: response.statusText,
+        isError: !response.ok,
+        id: 'products',
+        source: 'cart'
+      }
+    }
     const products = await response.json();
 
     // Group products by category
@@ -101,14 +111,21 @@ const cartReducer = createSlice({
           state.carts.splice(itemIndex, 1);
         }
       }
+    },
+    dismissCartAlerts: (state, action) => {
+      state.errorResponses = state.errorResponses.filter(item => item.id !== action.payload.id) || [];
     }
   },
   extraReducers: (builder) => {
     builder.addCase(fetchProducts.fulfilled, (state, action) => {
-      state.products = action.payload;
+      if (action.payload.isError && !state.errorResponses.length) {
+        state.errorResponses.push(action.payload);
+      } else if (!action.payload.isError){
+        state.products = action.payload;
+      }
     });
   } 
 });
 
-export const { addToCart, updateCart, decreaseQuantity, increaseQuantity, removeFromCart } = cartReducer.actions;
+export const { addToCart, updateCart, decreaseQuantity, increaseQuantity, removeFromCart, dismissCartAlerts } = cartReducer.actions;
 export default cartReducer.reducer;

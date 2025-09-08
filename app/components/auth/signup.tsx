@@ -24,6 +24,11 @@ export default function SignUp() {
             if (res.status === 201) {
                 navigate("/app/home", { replace: true });
             }
+        }).catch(error => {
+            return {
+                id: 'sign-up',
+                error: error.statusText
+            }
         });
         }
         

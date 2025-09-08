@@ -28,50 +28,72 @@ export default function Card({ paginatedProducts, cartSelector }: any) {
     return (
         <>
             {
-                paginatedProducts.map((product: any, key: number) => {
+                paginatedProducts?.map((product: any, key: number) => {
                     const cartItem = cartMap.get(product._id);
 
                     return (
-                        <div className="w-1/4 outline-[#243c5a] overflow-hidden inset-shadow-2xs border-[#dbdbdb] px-2 mb-2" key={key}>
+                        <div
+                            key={key}
+                            className="w-full p-2 mb-4 bg-white rounded shadow-sm border border-gray-300 px-2"
+                        >
+                            {/* Product Image */}
                             <img
-                                className="h-48 w-full max-w-96 p-2"
                                 src={resolveImage(product, images)}
                                 alt={product.description}
+                                className="h-48 w-full object-cover rounded-t"
                             />
-                            <div className="px-6 py-4">
-                                <div className="font-bold text-xl mb-2 text-center whitespace-nowrap overflow-hidden text-ellipsis hover:overflow-visible group-hover:opacity-100 text-nowrap" title={product.name}>
+
+                            {/* Product Name */}
+                            <div className="px-4 py-2">
+                                <div
+                                    className="font-semibold text-lg sm:text-xl text-center text-gray-800 truncate"
+                                    title={product.name}
+                                >
                                     {product.name}
                                 </div>
                             </div>
+
+                            {/* Price */}
                             <div className="flex justify-center items-center pb-2">
-                                <span className="px-2 font-bold text-md">{product.price}$</span>
+                                <span className="px-2 font-bold text-md text-gray-700">${product.price}</span>
                             </div>
 
+                            {/* Quantity or Add to Cart */}
                             {cartItem ? (
                                 <div
-                                    className="transition-all duration-300 ease-in-out transform scale-100 opacity-100 border-1 h-12 flex justify-center items-center"
                                     key={`quantity-${product._id}`}
+                                    className="transition-all duration-300 ease-in-out transform scale-100 opacity-100 border-t border-gray-200 h-12 flex justify-center items-center gap-2 sm:gap-4 px-2"
                                 >
-                                    <button className="cursor-pointer px-4 w-24" onClick={() => handleDecrement(cartItem)}>
+                                    <button
+                                        className="cursor-pointer px-2 sm:px-4 w-12 sm:w-16 text-sm sm:text-base bg-gray-100 rounded hover:bg-gray-200"
+                                        onClick={() => handleDecrement(cartItem)}
+                                    >
                                         <i className="fa fa-minus"></i>
                                     </button>
-                                    <span className="px-2 font-bold w-8 text-center">{cartItem.quantity}</span>
-                                    <button className="cursor-pointer px-4 w-24" onClick={() => handleIncrement(cartItem)}>
+
+                                    <span className="px-2 font-bold w-6 text-center text-sm sm:text-base">
+                                        {cartItem.quantity}
+                                    </span>
+
+                                    <button
+                                        className="cursor-pointer px-2 sm:px-4 w-12 sm:w-16 text-sm sm:text-base bg-gray-100 rounded hover:bg-gray-200"
+                                        onClick={() => handleIncrement(cartItem)}
+                                    >
                                         <i className="fa fa-plus"></i>
                                     </button>
                                 </div>
                             ) : (
                                 <button
-                                    className="transition-all duration-300 ease-in-out transform scale-100 opacity-100 w-full border-2 border-gray-400 text-center cursor-pointer p-2"
-                                    onClick={() => handleAddToCart(product)}
                                     key={`add-${product._id}`}
+                                    onClick={() => handleAddToCart(product)}
+                                    className="w-full border-2 border-gray-400 text-center cursor-pointer p-2 rounded hover:bg-gray-100 transition"
                                 >
                                     <i className="fa fa-shopping-cart px-1"></i>
-                                    Add to Cart
+                                    <span className="hidden md:inline">Add to Cart</span>
                                 </button>
                             )}
-
                         </div>
+
                     );
                 })
             }

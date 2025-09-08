@@ -21,8 +21,12 @@ export default function SideNav () {
     }, [dispatch, categorySelector, productSelector]);
 
     return (
-        <div className="w-[400px] bg-gray-200 pt-4 mx-1">
-            <SideNavCard productSelector={productSelector} categorySelector={categorySelector} />
-        </div>
+        <>
+            {Object.keys(productSelector)?.length > 0 && (
+                <div className="bg-gray-200 pt-4 mx-1">
+                    <SideNavCard productSelector={productSelector} categorySelector={categorySelector} />
+                </div>
+            )}
+        </>
     );
 }

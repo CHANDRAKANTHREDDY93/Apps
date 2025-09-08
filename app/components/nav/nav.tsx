@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { loggedOut } from "store/reducer/user-reducer";
 import ChatBot from "../chat-bot/chat-bot";
 import logoUrl from '../../../assets/logo.jpg';
+import Alert from "../alert/alert";
 
 export default function Nav() {
 
@@ -22,7 +23,7 @@ export default function Nav() {
 
     useEffect(() => {
         setLoggedIn(isLoggedIn);
-    }, []);
+    }, [isLoggedIn]);
 
     const handleLogin = () => {
         navigate("/login");
@@ -34,7 +35,7 @@ export default function Nav() {
 
     return (
         <>
-            <div className="flex">
+            <div className="max-w-screen-xl mx-auto">
                 <nav className="flex flex-wrap justify-between w-full flex-row bg-gray-800 text-white gap-4">
                     <div className="w-full">
                         <div className="flex justify-between">
@@ -97,10 +98,10 @@ export default function Nav() {
                                 <li key={id} className={className}>
                                     <NavLink to={href} className="flex items-center">
                                         <i className={`text-sm ${icon}`}></i>
-                                        {text === 'Cart' && cartSelector.length > 0 ? 
-                                        <span className="bg-red-500 text-white text-sm font-bold px-2 py-0.5 rounded-full">
-                                            {cartSelector?.length}
-                                        </span> : <span>{text}</span>
+                                        {text === 'Cart' && cartSelector.length > 0 ?
+                                            <span className="bg-red-500 text-white text-xs sm:text-sm font-bold px-2 py-0.5 rounded-full">
+                                                {cartSelector?.length}
+                                            </span> : <span>{text}</span>
                                         }
                                     </NavLink>
                                 </li>
@@ -108,10 +109,12 @@ export default function Nav() {
                         </ul>
                     </div>
                 </nav>
+
             </div>
+            <Alert />
 
             <Outlet />
-            <footer className="bg-gray-800 text-white text-center p-4 mt-4">
+            <footer className="bg-gray-800 text-white text-center p-4 mt-4 max-w-screen-xl mx-auto">
                 &copy; {new Date().getFullYear()} My Shopping Cart. All rights reserved.
                 <ChatBot />
             </footer>
