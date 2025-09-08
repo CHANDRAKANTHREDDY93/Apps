@@ -3,13 +3,14 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 const initProduct = {
     products: []
 }
+const apiBase = import.meta.env.VITE_API_BASE_URL;
 
 export const fetchItems = createAsyncThunk(
   'homeReducer/fetchItems',
   async () => {
     const [res1, res2] = await Promise.all([
-      fetch('/api/home', { credentials: 'include' }),
-      fetch('/api/best-sellers', { credentials: 'include' })
+      fetch(`${apiBase}/api/home`, { credentials: 'include' }),
+      fetch(`${apiBase}/api/best-sellers`, { credentials: 'include' })
     ]);
 
     if (!res1.ok || !res2.ok) {
