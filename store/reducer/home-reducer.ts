@@ -8,8 +8,8 @@ export const fetchItems = createAsyncThunk(
   'homeReducer/fetchItems',
   async () => {
     const [res1, res2] = await Promise.all([
-      fetch('/api/home'),
-      fetch('/api/best-sellers')
+      fetch('/api/home', { credentials: 'include' }),
+      fetch('/api/best-sellers', { credentials: 'include' })
     ]);
 
     if (!res1.ok || !res2.ok) {
