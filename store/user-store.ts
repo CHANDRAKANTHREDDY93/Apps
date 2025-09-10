@@ -6,7 +6,7 @@ import homePageReducer from './reducer/home-reducer';
 
 export const userStore = configureStore({
     reducer: {
-        reducer: userReducer,
+        userReducer: userReducer,
         cartReducer: cartReducer,
         categoryReducer: categoryReducer,
         homePageReducer: homePageReducer

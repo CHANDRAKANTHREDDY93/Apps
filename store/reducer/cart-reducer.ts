@@ -13,7 +13,6 @@ export const fetchProducts = createAsyncThunk(
   'cartReducer/fetchProducts',
   async () => {
     const response = await fetch(`${apiBase}/api/products`, { credentials: 'include' });
-    console.log(response);
     if (!response.ok) {
       return {
         error: response.statusText,

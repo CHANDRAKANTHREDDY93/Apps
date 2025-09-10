@@ -23,7 +23,7 @@ export default function SideNav () {
     return (
         <>
             {Object.keys(productSelector)?.length > 0 && (
-                <div className="bg-gray-200 pt-4 mx-1">
+                <div className="bg-gray-200 py-4 mx-1">
                     <SideNavCard productSelector={productSelector} categorySelector={categorySelector} />
                 </div>
             )}

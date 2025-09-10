@@ -1,39 +1,28 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
-import { loggedIn, loggedOut } from "store/reducer/user-reducer";
+import { fetchLogin } from "store/reducer/user-reducer";
 import type { AppDispatch } from "store/user-store";
 import logoUrl from '../../../assets/logo.jpg';
+import Alert from "../alert/alert";
 
 const apiBase = import.meta.env.VITE_API_BASE_URL;
 
 export default function Login() {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const dispatch = useDispatch<AppDispatch>();
-    const navigate = useNavigate();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
 
-    const login = async (event: Event) => {
-        event.preventDefault();
-        await fetch(`${apiBase}/api/login`, {
-            method: 'POST',
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({email: email, password: password}),
-            credentials: 'include'
-        }).then((res) => {
-          console.log(res);
-          if (res.status === 200) {
-            dispatch(loggedIn());
-            navigate("/app/home", { replace: true });
-          } else {
-            dispatch(loggedOut());
-          }
-        })
-        .catch(err => console.error(err));
-    };
+  const login = async (event: Event) => {
+    event.preventDefault();
+    dispatch(fetchLogin(email, password));
+  };
 
-    return (
-        <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+  return (
+    <>
+      <Alert />
+      <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <img
             alt="Shopping Cart"
@@ -103,5 +92,7 @@ export default function Login() {
           </p>
         </div>
       </div>
-    );
+    </>
+
+  );
 };

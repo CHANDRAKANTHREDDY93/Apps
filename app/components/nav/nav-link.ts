@@ -10,11 +10,18 @@ export const NavLinks = [
         id: 2,
         href: '/app/categories',
         text: 'Categories',
-        className: 'mr-auto',
+        className: '',
         icon: 'fa fa-th-list px-2'
     },
     {
         id: 3,
+        text: 'Search',
+        href: '',
+        icon: '',
+        className: 'flex flex-1'
+    },
+    {
+        id: 4,
         href: '/app/cart',
         text: 'Cart',
         className: 'px-2 justify-end',

@@ -1,4 +1,4 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { addToCart, decreaseQuantity, increaseQuantity, updateCart } from "store/reducer/cart-reducer";
 import resolveImage from "~/util/products.util";
 
@@ -9,7 +9,6 @@ export default function Card({ paginatedProducts, cartSelector }: any) {
     const dispatch = useDispatch<any>();
 
     const handleAddToCart = (product: any) => {
-        console.log(product);
         dispatch(cartSelector.length ? updateCart({
             ...product
         }) : addToCart({

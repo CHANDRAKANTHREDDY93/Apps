@@ -77,8 +77,8 @@ const homePageReducer = createSlice({
     builder.addCase(fetchItems.fulfilled, (state, action) => {
       if (Array.isArray(action.payload) && action.payload.every(item => item.isError === true)) {
         state.errorResponses = action.payload;
-      } else if (action.payload.isError) {
-        state.errorResponses.push(...action.payload);
+      } else if (action.payload.isError && !state.errorResponses?.length) {
+        state.errorResponses.push(action.payload);
       } else {
         state.products = action.payload;
       }

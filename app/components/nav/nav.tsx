@@ -7,6 +7,7 @@ import { loggedOut } from "store/reducer/user-reducer";
 import ChatBot from "../chat-bot/chat-bot";
 import logoUrl from '../../../assets/logo.jpg';
 import Alert from "../alert/alert";
+import Search from "../search/search";
 
 export default function Nav() {
 
@@ -93,10 +94,11 @@ export default function Nav() {
                                 </>
                             )}
                         </div>
-                        <ul className="flex flex-wrap justify-between p-2">
+                        <ul className="flex flex-wrap items-center justify-between gap-1">
                             {NavLinks.map(({ id, href, text, className, icon }) => (
                                 <li key={id} className={className}>
-                                    <NavLink to={href} className="flex items-center">
+                                    {text === 'Search' ? <Search /> : 
+                                    <NavLink to={href} className={`${className} w-full sm:w-auto flex justify-between items-center`}>
                                         <i className={`text-sm ${icon}`}></i>
                                         {text === 'Cart' && cartSelector.length > 0 ?
                                             <span className="bg-red-500 text-white text-xs sm:text-sm font-bold px-2 py-0.5 rounded-full">
@@ -104,6 +106,7 @@ export default function Nav() {
                                             </span> : <span>{text}</span>
                                         }
                                     </NavLink>
+                                    }
                                 </li>
                             ))}
                         </ul>

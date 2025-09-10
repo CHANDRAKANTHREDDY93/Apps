@@ -1,24 +1,61 @@
-import { useState } from "react"
-import { useDispatch, useSelector } from "react-redux";
+import { createSelector } from "@reduxjs/toolkit";
+import { useEffect, useState } from "react"
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { dismissCartAlerts } from "store/reducer/cart-reducer";
 import { dismissHomeAlerts } from "store/reducer/home-reducer";
+import { dismissLoginAlerts } from "store/reducer/user-reducer";
 
 
 export default function Alert() {
     const [isShowAlert, setShowAlert] = useState<boolean>(false);
     const dispatch = useDispatch();
-    const errorBanner = useSelector((state) => {
-        const homeErrors = state.homePageReducer?.errorResponses || [];
-        const cartErrors = state.cartReducer?.errorResponses || [];
-        return [...homeErrors, ...cartErrors];
-    });
 
-    const dismissAlert = (alert) => {
-        console.log(alert);
+    const selectHomeErrors = (state) => state.homePageReducer?.errorResponses || [];
+    const selectCartErrors = (state) => state.cartReducer?.errorResponses || [];
+    const selectLoginErrors = (state) => state.userReducer?.errorResponses || [];
+
+    const selectErrorBanner = createSelector(
+        [selectHomeErrors, selectCartErrors, selectLoginErrors],
+        (homeErrors, cartErrors, loginErrors) => {
+            const combined = [
+                ...homeErrors,
+                ...cartErrors,
+                ...loginErrors
+            ];
+
+            // Only transform if combined errors actually changed
+            return combined.map((err) => ({
+                ...err,
+                source:
+                    homeErrors.includes(err) ? 'home' :
+                        cartErrors.includes(err) ? 'cart' :
+                            loginErrors.includes(err) ? 'login' :
+                                'unknown'
+            }));
+        }
+    );
+    const errorBanner = useSelector(selectErrorBanner, shallowEqual);
+
+
+    useEffect(() => {
+        const timeoutIds = errorBanner.map((alert) =>
+            setTimeout(() => {
+                dismissAlert(alert); // dispatch Alert
+            }, 5000) // dismiss after 5 seconds
+        );
+
+        return () => {
+            timeoutIds.forEach(clearTimeout); // cleanup on unmount
+        };
+    }, [errorBanner]);
+
+    const dismissAlert = (alert: any) => {
         if (alert.source === 'home') {
             dispatch(dismissHomeAlerts(alert));
         } else if (alert.source === 'cart') {
             dispatch(dismissCartAlerts(alert));
+        } else if (alert.source === 'login') {
+            dispatch(dismissLoginAlerts(alert));
         }
     };
 
