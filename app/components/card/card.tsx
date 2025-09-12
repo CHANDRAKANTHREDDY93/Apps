@@ -4,7 +4,7 @@ import resolveImage from "~/util/products.util";
 
 const images = import.meta.glob('../../../assets/**/*.jpg', { eager: true });
 
-export default function Card({ paginatedProducts, cartSelector }: any) {
+export default function Card({ paginatedProducts, cartSelector, isChat }: any) {
 
     const dispatch = useDispatch<any>();
 
@@ -39,7 +39,7 @@ export default function Card({ paginatedProducts, cartSelector }: any) {
                             <img
                                 src={resolveImage(product, images)}
                                 alt={product.description}
-                                className="h-48 w-full object-cover rounded-t"
+                                className={`object-cover rounded ${isChat ? 'h-20 w-20 mx-auto' : 'w-full h-48 rounded-t'}`}
                             />
 
                             {/* Product Name */}
@@ -88,7 +88,7 @@ export default function Card({ paginatedProducts, cartSelector }: any) {
                                     className="w-full border-2 border-gray-400 text-center cursor-pointer p-2 rounded hover:bg-gray-100 transition"
                                 >
                                     <i className="fa fa-shopping-cart px-1"></i>
-                                    <span className="hidden md:inline">Add to Cart</span>
+                                    {isChat ? <></> : <span className="hidden md:inline">Add to Cart</span>}
                                 </button>
                             )}
                         </div>

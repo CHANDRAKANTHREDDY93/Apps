@@ -42,7 +42,8 @@ export default function Nav() {
                         <div className="flex justify-between">
                             <img src={logoUrl} alt="My Shopping Cart" className="h-18 w-[96px] px-1 object-cover top-0 left-0 z-0"></img>
                             {!loggedIn ? (
-                                <button className="cursor-pointer border-2 border-gray-700 m-2 w-[150px]" onClick={handleLogin}>
+                                <button className="cursor-pointer m-2 w-[150px]" onClick={handleLogin}>
+                                    <i className="fa fa-user px-2" aria-hidden="true"></i>
                                     Login / Sign Up
                                 </button>
                             ) : (
@@ -94,7 +95,7 @@ export default function Nav() {
                                 </>
                             )}
                         </div>
-                        <ul className="flex flex-wrap items-center justify-between gap-1">
+                        <ul className="flex flex-wrap items-center justify-between gap-1 my-1">
                             {NavLinks.map(({ id, href, text, className, icon }) => (
                                 <li key={id} className={className}>
                                     {text === 'Search' ? <Search /> : 
